@@ -1,5 +1,8 @@
 package br.com.pubsubdemo;
 
+import br.com.pubsubdemo.domain.Email;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.cloud.gcp.pubsub.core.PubSubTemplate;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +23,8 @@ public class ProducerRestController {
     }
 
     @PostMapping("/publish/{name}")
-    ListenableFuture<String> publish(@PathVariable String name, @RequestBody EmailRequest emailRequest){
+    ListenableFuture<String> publish(@PathVariable String name, @RequestBody Email email) throws JsonProcessingException {
         Map<String, String> map = new HashMap<>();
-        map.put("email", emailRequest.getEmail());
-        map.put("name", emailRequest.getName());
-        return this.template.publish("email-topic", "message " + name + "!", map);
+        return this.template.publish("email-topic", new ObjectMapper().writeValueAsBytes(email));
     }
 }

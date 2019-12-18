@@ -1,6 +1,6 @@
-package br.com.pubsubdemo;
+package br.com.pubsubdemo.domain;
 
-public class EmailRequest {
+public class Email {
 
     private String email;
     private String name;
